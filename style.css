@@ -1,0 +1,104 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400&display=swap');
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+header,
+form {
+    min-height: 20vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+form {
+    padding-bottom: 3rem;
+}
+
+header {
+    font-size: 2.5rem;
+    font-weight: bolder;
+    color: white;
+}
+
+form input,
+form button {
+    padding: 0.5rem;
+    font-size: 2rem;
+    border: none;
+    background-color: white;
+    outline: none;
+}
+
+form button {
+    color: #e087b5;
+}
+
+form button:hover {
+    color: #b7adb6;
+    cursor: pointer;
+}
+
+body {
+    background-color: #b7adb6;
+    font-family: 'Poppins', sans-serif;
+    min-width: 100vh;
+}
+
+ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+li {
+    display: flex;
+    justify-content: space-between;
+    background-color: white;
+    min-width: 100vh;
+    min-height: 10vh;
+    margin: 1rem;
+}
+
+li p {
+    flex: 1;
+    align-self: center;
+    margin-left: 1rem;
+    font-size: 1.5rem;
+    font-weight: lighter;
+}
+
+li button {
+    border: none;
+    outline: none;
+    padding: 1rem;
+    cursor: pointer;
+    color: #eff6ff
+}
+
+li button i {
+    font-size: 1.5rem;
+}
+
+li>.check-btn {
+    background-color: #97a7c8;
+}
+
+li>.check-btn:hover {
+    color: #e087b5;
+}
+
+li>.trash-btn {
+    background-color: #e087b5;
+}
+
+li>.trash-btn:hover {
+    color: #97a7c8;
+}
+
+li.todo.completed {
+    text-decoration: line-through;
+    opacity: 0.5;
+}
