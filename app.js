@@ -12,7 +12,7 @@ function addTodo(e) {
     liP.innerText = inputField.value;
     const checkBtn = document.createElement('button');
     checkBtn.classList.add('check-btn');
-    checkBtn.innerHTML = `<i class='fas fa-check-square'></i>`;
+    checkBtn.innerHTML = `<i class='fas fa-check'></i>`;
     const deleteBtn = document.createElement('button');
     deleteBtn.classList.add('trash-btn');
     deleteBtn.innerHTML = `<i class='fas fa-trash'></i>`;
@@ -30,16 +30,21 @@ function addTodo(e) {
 
 function deleteTodo(e) {
     e.preventDefault();
-    e.target.parentNode.parentNode.remove();
+    const item = e.target.parentElement;
+    item.classList.add("fall");
+    const animated = document.querySelector('.fall');
+
+    animated.addEventListener('transitionend', () => {
+        item.remove();
+    });
+
+
 }
 
 function toggleCheckTodo(e) {
 
-    const item = e.target.parentNode;
-
-
-    console.log();
-    item.parentElement.classList.toggle('completed')
+    const item = e.target.parentElement;
+    item.classList.toggle('completed')
 
 
 }

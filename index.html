@@ -17,8 +17,15 @@
         <form>
             <input type="text" name="todo-input" id="todo-input">
             <button type="submit" id="submit-btn"><i class="fas fa-plus-square"></i></button>
+            <select name="selectOpts" class="selectOpts">
+                <option value="all">All</option>
+                <option value="completed">Completed</option>
+                <option value="uncompleted">Uncompleted</option>
+            </select>
         </form>
+
         <ul class="todos"></ul>
+
     </div>
 
     <script src="app.js"></script>
