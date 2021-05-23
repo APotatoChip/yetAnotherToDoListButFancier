@@ -115,14 +115,11 @@ li.todo.completed {
 }
 
 select {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    -ms-appearance: none;
-    appearance: none;
     outline: none;
     box-shadow: none;
     border: none;
     background-image: none;
+    border: none;
     font-family: 'Poppins', sans-serif;
     cursor: pointer;
     width: 12rem;
@@ -134,4 +131,9 @@ select {
     margin: 1rem;
     overflow: hidden;
     position: relative;
+}
+
+select::after {
+    content: "\25BC";
+    pointer-events: none;
 }
