@@ -6,6 +6,8 @@ const select = document.querySelector('.selectOpts');
 submitBtn.addEventListener('click', addTodo);
 select.addEventListener('click', filterTodos);
 
+window.addEventListener('load', getAllTodos);
+
 function addTodo(e) {
     e.preventDefault();
     const li = document.createElement('li');
@@ -48,7 +50,7 @@ function deleteTodo(e) {
 
 function checkTodo(e) {
     const item = e.target.parentElement;
-    item.classList.toggle('completed')
+    item.classList.toggle('completed');
 
 }
 
@@ -75,18 +77,41 @@ function deleteTodos(todo) {
 
 function filterTodos(e) {
     let optVal = e.target.value;
+    const arrLi = ul.childNodes;
     switch (optVal) {
-        case "all":
 
+        case "all":
+            console.log(optVal);
+            console.log(arrLi);
+            arrLi.forEach(el => {
+                if (el.style.display === "none") {
+                    el.style.display = "flex";
+                }
+            });
             break;
         case "completed":
+            console.log(optVal);
+            arrLi.forEach((el) => {
+                if (el.classList.contains("completed")) {
+                    el.style.display = "flex";
+                } else {
+                    el.style.display = "none";
+                }
+            });
             // getCompletedTodos();
             break;
         case "uncompleted":
+            console.log(optVal);
+            arrLi.forEach((el) => {
+                if (!el.classList.contains("completed")) {
+                    el.style.display = "flex";
+                } else {
+                    el.style.display = "none";
+                }
+            });
             // getUncompletedTodos();
             break;
-        default:
-            getAllTodos();
+
 
     }
 }
@@ -97,6 +122,7 @@ function getAllTodos() {
     todos.forEach(t => {
         const li = document.createElement('li');
         li.classList.add('todo');
+        li.style.display = "flex";
         const liP = document.createElement('p');
         liP.innerText = t;
         const checkBtn = document.createElement('button');
