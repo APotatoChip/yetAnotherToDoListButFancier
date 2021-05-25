@@ -34,6 +34,45 @@ function addTodo(e) {
     checkBtn.addEventListener('click', checkTodo);
 }
 
+function getAllTodos() {
+    let todos = JSON.parse(localStorage.getItem('todos'));
+    if (todos) {
+        todos.completed.forEach(t => createToDo(t, true));
+        todos.uncompleted.forEach(t => createToDo(t, false));
+    }
+
+}
+
+function createToDo(todo, isCompleted) {
+
+    const li = document.createElement('li');
+    li.classList.add('todo');
+    li.style.display = "flex";
+    const liP = document.createElement('p');
+    liP.innerText = todo;
+    const checkBtn = document.createElement('button');
+    checkBtn.classList.add('check-btn');
+    checkBtn.innerHTML = `<i class='fas fa-check'></i>`;
+    const deleteBtn = document.createElement('button');
+    deleteBtn.classList.add('trash-btn');
+    deleteBtn.innerHTML = `<i class='fas fa-trash'></i>`;
+    deleteBtn.addEventListener('click', deleteTodo);
+    checkBtn.addEventListener('click', checkTodo);
+    if (isCompleted === true) {
+        li.classList.add('completed');
+    }
+
+    li.appendChild(liP);
+    li.appendChild(checkBtn);
+    li.appendChild(deleteBtn);
+    ul.appendChild(li);
+
+
+    if (!todo) {
+        let todoSave = li.childNodes[0].innerText;
+        saveAllTodos(todoSave);
+    }
+}
 
 function deleteTodo(e) {
     e.preventDefault();
@@ -75,6 +114,20 @@ function checkTodo(e) {
 
 }
 
+function deleteTodos(todo) {
+    let todos;
+    todos = JSON.parse(localStorage.getItem('todos'));
+    if (todos.completed.includes(todo)) {
+        let idx = todos.completed.indexOf(todo);
+        todos.completed.splice(idx, 1);
+    } else {
+        let idx = todos.uncompleted.indexOf(todo);
+        todos.uncompleted.splice(idx, 1);
+    }
+
+    localStorage.setItem('todos', JSON.stringify(todos));
+}
+
 function saveAllTodos(todo) {
     var allTodos;
     if (localStorage.getItem('todos') === null) {
@@ -89,22 +142,6 @@ function saveAllTodos(todo) {
 
     allTodos.uncompleted.push(todo);
     localStorage.setItem("todos", JSON.stringify(allTodos));
-}
-
-
-
-function deleteTodos(todo) {
-    let todos;
-    todos = JSON.parse(localStorage.getItem('todos'));
-    if (todos.completed.includes(todo)) {
-        let idx = todos.completed.indexOf(todo);
-        todos.completed.splice(idx, 1);
-    } else {
-        let idx = todos.uncompleted.indexOf(todo);
-        todos.uncompleted.splice(idx, 1);
-    }
-
-    localStorage.setItem('todos', JSON.stringify(todos));
 }
 
 function filterTodos(e) {
@@ -138,54 +175,4 @@ function filterTodos(e) {
             });
             break;
     }
-}
-
-function getAllTodos() {
-
-    let todos = JSON.parse(localStorage.getItem('todos'));
-
-    todos.completed.forEach(t => {
-        const li = document.createElement('li');
-        li.classList.add('todo');
-        li.classList.add('completed');
-        li.style.display = "flex";
-        const liP = document.createElement('p');
-        liP.innerText = t;
-        const checkBtn = document.createElement('button');
-        checkBtn.classList.add('check-btn');
-        checkBtn.innerHTML = `<i class='fas fa-check'></i>`;
-        const deleteBtn = document.createElement('button');
-        deleteBtn.classList.add('trash-btn');
-        deleteBtn.innerHTML = `<i class='fas fa-trash'></i>`;
-
-        li.appendChild(liP);
-        li.appendChild(checkBtn);
-        li.appendChild(deleteBtn);
-        ul.appendChild(li);
-
-        deleteBtn.addEventListener('click', deleteTodo);
-        checkBtn.addEventListener('click', checkTodo);
-    });
-    todos.uncompleted.forEach(t => {
-        const li = document.createElement('li');
-        li.classList.add('todo');
-        li.style.display = "flex";
-        const liP = document.createElement('p');
-        liP.innerText = t;
-        const checkBtn = document.createElement('button');
-        checkBtn.classList.add('check-btn');
-        checkBtn.innerHTML = `<i class='fas fa-check'></i>`;
-        const deleteBtn = document.createElement('button');
-        deleteBtn.classList.add('trash-btn');
-        deleteBtn.innerHTML = `<i class='fas fa-trash'></i>`;
-
-        li.appendChild(liP);
-        li.appendChild(checkBtn);
-        li.appendChild(deleteBtn);
-        ul.appendChild(li);
-
-        deleteBtn.addEventListener('click', deleteTodo);
-        checkBtn.addEventListener('click', checkTodo);
-    });
-
 }
