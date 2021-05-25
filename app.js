@@ -28,7 +28,7 @@ function addTodo(e) {
     inputField.value = "";
 
     let todoSave = li.childNodes[0].innerText;
-    saveTodos(todoSave);
+    saveAllTodos(todoSave);
 
     deleteBtn.addEventListener('click', deleteTodo);
     checkBtn.addEventListener('click', checkTodo);
@@ -38,12 +38,13 @@ function addTodo(e) {
 function deleteTodo(e) {
     e.preventDefault();
     const item = e.target.parentElement;
+
     item.classList.add("fall");
     const animated = document.querySelector('.fall');
     animated.addEventListener('transitionend', () => {
         item.remove();
     });
-    console.log(item);
+
     let delTodo = item.childNodes[0].innerText;
     deleteTodos(delTodo);
 }
@@ -51,27 +52,58 @@ function deleteTodo(e) {
 function checkTodo(e) {
     const item = e.target.parentElement;
     item.classList.toggle('completed');
+    allTodos = JSON.parse(localStorage.getItem('todos'));
+    let todo = item.childNodes[0].innerText;
+
+    if (item.classList.contains('completed') && !allTodos.completed.includes(todo)) {
+        allTodos.completed.push(todo);
+        if (allTodos.uncompleted.includes(todo)) {
+            let idx = allTodos.uncompleted.indexOf(todo);
+            allTodos.uncompleted.splice(idx, 1);
+        }
+
+
+    } else if (!allTodos.uncompleted.includes(todo)) {
+        allTodos.uncompleted.push(todo);
+        if (allTodos.completed.includes(todo)) {
+            let idx = allTodos.completed.indexOf(todo);
+            allTodos.completed.splice(idx, 1);
+        }
+
+    }
+    localStorage.setItem('todos', JSON.stringify(allTodos));
 
 }
 
-function saveTodos(todo) {
-    let todos;
+function saveAllTodos(todo) {
+    var allTodos;
     if (localStorage.getItem('todos') === null) {
-        todos = [];
+        allTodos = {
+            completed: [],
+            uncompleted: []
+        }
+
     } else {
-        todos = JSON.parse(localStorage.getItem('todos'));
+        allTodos = JSON.parse(localStorage.getItem('todos'));
     }
 
-    todos.push(todo);
-    localStorage.setItem("todos", JSON.stringify(todos));
+    allTodos.uncompleted.push(todo);
+    localStorage.setItem("todos", JSON.stringify(allTodos));
 }
+
+
 
 function deleteTodos(todo) {
     let todos;
     todos = JSON.parse(localStorage.getItem('todos'));
-    let idx = todos.indexOf(todo);
-    console.log(idx);
-    todos.splice(idx, 1);
+    if (todos.completed.includes(todo)) {
+        let idx = todos.completed.indexOf(todo);
+        todos.completed.splice(idx, 1);
+    } else {
+        let idx = todos.uncompleted.indexOf(todo);
+        todos.uncompleted.splice(idx, 1);
+    }
+
     localStorage.setItem('todos', JSON.stringify(todos));
 }
 
@@ -81,8 +113,6 @@ function filterTodos(e) {
     switch (optVal) {
 
         case "all":
-            console.log(optVal);
-            console.log(arrLi);
             arrLi.forEach(el => {
                 if (el.style.display === "none") {
                     el.style.display = "flex";
@@ -90,7 +120,6 @@ function filterTodos(e) {
             });
             break;
         case "completed":
-            console.log(optVal);
             arrLi.forEach((el) => {
                 if (el.classList.contains("completed")) {
                     el.style.display = "flex";
@@ -98,10 +127,8 @@ function filterTodos(e) {
                     el.style.display = "none";
                 }
             });
-            // getCompletedTodos();
             break;
         case "uncompleted":
-            console.log(optVal);
             arrLi.forEach((el) => {
                 if (!el.classList.contains("completed")) {
                     el.style.display = "flex";
@@ -109,17 +136,37 @@ function filterTodos(e) {
                     el.style.display = "none";
                 }
             });
-            // getUncompletedTodos();
             break;
-
-
     }
 }
 
 function getAllTodos() {
 
     let todos = JSON.parse(localStorage.getItem('todos'));
-    todos.forEach(t => {
+
+    todos.completed.forEach(t => {
+        const li = document.createElement('li');
+        li.classList.add('todo');
+        li.classList.add('completed');
+        li.style.display = "flex";
+        const liP = document.createElement('p');
+        liP.innerText = t;
+        const checkBtn = document.createElement('button');
+        checkBtn.classList.add('check-btn');
+        checkBtn.innerHTML = `<i class='fas fa-check'></i>`;
+        const deleteBtn = document.createElement('button');
+        deleteBtn.classList.add('trash-btn');
+        deleteBtn.innerHTML = `<i class='fas fa-trash'></i>`;
+
+        li.appendChild(liP);
+        li.appendChild(checkBtn);
+        li.appendChild(deleteBtn);
+        ul.appendChild(li);
+
+        deleteBtn.addEventListener('click', deleteTodo);
+        checkBtn.addEventListener('click', checkTodo);
+    });
+    todos.uncompleted.forEach(t => {
         const li = document.createElement('li');
         li.classList.add('todo');
         li.style.display = "flex";
